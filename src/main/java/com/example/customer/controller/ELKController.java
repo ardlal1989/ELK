@@ -1,14 +1,9 @@
 package com.example.customer.controller;
 
-import java.io.File;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +28,9 @@ public class ELKController {
 		
 		  ReportModel rep= reportService.convertXMLToObject();  
           Report report=new Report();
-          SimpleDateFormat dateParser = new SimpleDateFormat("MM/dd/yy HH:mm");
+          SimpleDateFormat dateParser = new SimpleDateFormat("MM-dd-yy HH:mm:ss");
+          DateFormat df = new SimpleDateFormat("MM/dd/yy hh:mm aa");
+          DateFormat outputformat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
 	         
 	        List<Row> rowList=rep.getRows(); 
 	        for(int i=0;i<rowList.size();i++)
@@ -44,7 +41,9 @@ public class ELKController {
 	        for(int j=0;j<sample.size();j++)
 	        {
 	        	try {
-					report.setDate(dateParser.parse(date));
+	        		
+	        		
+					report.setDate(dateParser.parse(outputformat.format(df.parse(date))));
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
